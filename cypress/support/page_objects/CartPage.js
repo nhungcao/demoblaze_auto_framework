@@ -6,8 +6,9 @@ export class CartPage {
     static get TABLE_ROWS() { return '#tbodyid tr'; }
 
     visit() {
+        cy.intercept('POST', '**/view').as('getCartData');
         cy.get(CartPage.CART_NAV_LINK).click();
-        cy.wait('@getCartData').its('response.statusCode').should('eq', 200);
+        cy.wait('@getCartData', { timeout: 10000 }).its('response.statusCode').should('eq', 200);
         cy.url().should('include', 'cart.html');
         return this;
     }
