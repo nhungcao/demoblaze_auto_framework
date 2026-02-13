@@ -1,0 +1,15 @@
+{
+  "phones": [
+    { "name": "Samsung galaxy s6" },
+    { "name": "Nokia lumia 1520" },
+    { "name": "Iphone 6 32gb" }
+  ],
+  "laptops": [
+    { "name": "Sony vaio i5" },
+    { "name": "MacBook air" }
+  ],
+  "monitors": [
+    { "name": "Apple monitor 24" },
+    { "name": "ASUS Full HD" }
+  ]
+}
