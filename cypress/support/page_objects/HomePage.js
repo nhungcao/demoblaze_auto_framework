@@ -52,7 +52,9 @@ export class HomePage {
     }
 
     addToCart() {
-        cy.get(HomePage.ADD_TO_CART_BTN).click();
+        cy.intercept('POST', '**/addtocart').as('addToCartAPI');
+        cy.get(HomePage.ADD_TO_CART_BTN).click();  
+        cy.wait('@addToCartAPI').its('response.statusCode').should('eq', 200);      
         cy.on('window:alert', (str) => {
             expect(str).to.equal('Product added');
         });

@@ -19,15 +19,24 @@ describe('Demoblaze - Cart Module Tests', () => {
         homePage.selectCategory('Phones').selectProduct(phoneName);
 
         // get captured API data and verify in cart
-        getCapturedData().then((apiData) => {
-            homePage.addToCart();
-            
-            cartPage.visit();
-            // verify product details in cart
-            cartPage.verifyProductDetails(apiData.title, apiData.price.toString());
-            
-            // check product image in cart
-            cy.get('td img').should('have.attr', 'src').and('include', apiData.img);
+        getCapturedData().as('apiData');
+
+        //add to cart
+        homePage.addToCart();
+
+        //visit cart page
+        cartPage.visit();
+
+        // verify product is visible in cart
+
+        cy.get('@apiData').then((apiData) => {
+        cartPage.verifyProductDetails(apiData.title, apiData.price.toString());
+        
+        // check product image in cart
+        cy.get('td img')
+            .should('be.visible')
+            .and('have.attr', 'src')
+            .and('include', apiData.img);
         });
     });
 

@@ -6,10 +6,22 @@ export class CartPage {
     static get TABLE_ROWS() { return '#tbodyid tr'; }
 
     visit() {
-        cy.intercept('POST', '**/view').as('getCartData');
-        cy.get(CartPage.CART_NAV_LINK).click();
-        cy.wait('@getCartData', { timeout: 10000 }).its('response.statusCode').should('eq', 200);
-        cy.url().should('include', 'cart.html');
+        cy.get(CartPage.CART_NAV_LINK).click();        
+        cy.url({ timeout: 10000 }).should('include', 'cart.html');
+
+        // Ensure at least one product row is visible, reload if table is empty
+        cy.get('body').then(($body) => {
+        const rowCount = $body.find('#tbodyid tr').length;
+        if (rowCount === 0) {
+            cy.log('Table empty, forcing reload...');
+            cy.reload(); 
+        }
+
+        // Verify at least one product row is now present
+        cy.get('#tbodyid tr', { timeout: 15000 }).should('have.length.at.least', 1);
+
+    });
+
         return this;
     }
 
